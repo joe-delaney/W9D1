@@ -1,7 +1,9 @@
 const Asteroid = require("./asteroid.js");
+const Ship = require("./ship.js");
 
 function Game() {
   this.asteroids = [];
+  this.ship = new Ship({pos: this.randomPosition(), game:this});
   this.addAsteroids();
 }
 
@@ -15,6 +17,10 @@ Game.prototype.addAsteroids = function() {
   }
 };
 
+Game.prototype.allObjects = function() {
+  return this.asteroids.concat([this.ship]);
+};
+
 //returns random position
 Game.prototype.randomPosition = function() {
   let x = Math.random() * Game.DIM_X;
@@ -26,14 +32,16 @@ Game.prototype.draw = function(ctx) {
   ctx.clearRect(0,0,Game.DIM_X, Game.DIM_Y);
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, 1000, 650);
-  for (let i = 0; i < this.asteroids.length; i++) {
-    this.asteroids[i].draw(ctx);
+  let allObjs = this.allObjects();
+  for (let i = 0; i < allObjs.length; i++) {
+    allObjs[i].draw(ctx);
   }
 };
 
 Game.prototype.moveObjects = function () {
-  for (let i = 0; i < this.asteroids.length; i++) {
-    this.asteroids[i].move();
+  let allObjs = this.allObjects();
+  for (let i = 0; i < allObjs.length; i++) {
+    allObjs[i].move();
   }
 };
 
@@ -55,15 +63,18 @@ Game.prototype.wrap = function(pos) {
 
 //Using brute force approach, might need to refactor if num of asteroids gets big
 Game.prototype.checkCollisions = function() {
-  let n = this.asteroids.length;
+  let allObjs = this.allObjects();
+  let n = allObjs.length;
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n; j++) {
-      if(i !== j && i < n && j < n) {
-        if(this.asteroids[i].isCollidedWith(this.asteroids[j])) {
-          this.asteroids[i].collideWith(this.asteroids[j]);
-          n = this.asteroids.length;
-          i = 0;
-          j = 0;
+      if(i !== j && i < n-1 && j < n) {
+        if(allObjs[i].isCollidedWith(allObjs[j])) {
+          allObjs[i].collideWith(allObjs[j]);
+          return;
+          // allObjs = this.allObjects();
+          // n = allObjs.length;
+          // i = 0;
+          // j = 0;
         }
       }
     }
