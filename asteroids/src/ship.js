@@ -18,6 +18,23 @@ Ship.prototype.relocate = function () {
   this.vel = [0, 0];
 };
 
+Ship.prototype.power = function(impulse) {
+  this.vel[0] = impulse[0];
+  this.vel[1] = impulse[1];
+  
+  // if(this.vel[0] < -4) {
+  //   this.vel[0] = -4;
+  // } else if(this.vel[0] > 4) {
+  //   this.vel[0] = 4;
+  // }
+
+  // if (this.vel[1] < -4) {
+  //   this.vel[1] = -4;
+  // } else if (this.vel[1] > 4) {
+  //   this.vel[1] = 4;
+  // }
+};
+
 Ship.RADIUS = 20;
 Ship.COLOR = "blue";
 
