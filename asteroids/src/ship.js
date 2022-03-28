@@ -1,5 +1,6 @@
 const MovingObject = require("./moving_object.js");
 const Util = require("./utils.js");
+const Bullet = require("./bullet.js");
 
 function Ship(options) {
   MovingObject.call(this, {
@@ -21,20 +22,15 @@ Ship.prototype.relocate = function () {
 Ship.prototype.power = function(impulse) {
   this.vel[0] = impulse[0];
   this.vel[1] = impulse[1];
-  
-  // if(this.vel[0] < -4) {
-  //   this.vel[0] = -4;
-  // } else if(this.vel[0] > 4) {
-  //   this.vel[0] = 4;
-  // }
-
-  // if (this.vel[1] < -4) {
-  //   this.vel[1] = -4;
-  // } else if (this.vel[1] > 4) {
-  //   this.vel[1] = 4;
-  // }
 };
 
+Ship.prototype.fireBullet = function() {
+  // let bullet = new Bullet({pos: this.pos, vel: this.vel, game: this.game});
+  debugger;
+  let bullet = new Bullet({ pos: this.pos, vel: this.vel, game: this.game });
+  this.game.add(bullet);
+};
+ 
 Ship.RADIUS = 20;
 Ship.COLOR = "blue";
 

@@ -1,8 +1,10 @@
 const Asteroid = require("./asteroid.js");
 const Ship = require("./ship.js");
+const Bullet = require("./bullet.js");
 
 function Game() {
   this.asteroids = [];
+  this.bullets = [];
   this.ship = new Ship({pos: this.randomPosition(), game:this});
   this.addAsteroids();
 }
@@ -18,7 +20,7 @@ Game.prototype.addAsteroids = function() {
 };
 
 Game.prototype.allObjects = function() {
-  return this.asteroids.concat([this.ship]);
+  return this.asteroids.concat(this.bullets, [this.ship]);
 };
 
 //returns random position
@@ -68,14 +70,14 @@ Game.prototype.checkCollisions = function() {
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n; j++) {
       if(i !== j && i < n-1 && j < n) {
-        if(allObjs[i].isCollidedWith(allObjs[j])) {
-          allObjs[i].collideWith(allObjs[j]);
-          return;
-          // allObjs = this.allObjects();
-          // n = allObjs.length;
-          // i = 0;
-          // j = 0;
-        }
+          if(allObjs[i].isCollidedWith(allObjs[j])) {
+            allObjs[i].collideWith(allObjs[j]);
+            return;
+            // allObjs = this.allObjects();
+            // n = allObjs.length;
+            // i = 0;
+            // j = 0;
+          }
       }
     }
   }
@@ -86,8 +88,21 @@ Game.prototype.step = function() {
   this.checkCollisions();
 };
 
-Game.prototype.remove = function(asteroid) {
-  this.asteroids = this.asteroids.filter((el) => el !== asteroid);
+Game.prototype.remove = function(obj) {
+  if (obj instanceof Bullet) {
+    this.bullets = this.bullets.filter((el) => el !== obj);
+  } else if (obj instanceof Asteroid) {
+    this.asteroids = this.asteroids.filter((el) => el !== obj);
+  }
+  
+};
+
+Game.prototype.add = function(obj) {
+  if(obj instanceof Bullet) {
+    this.bullets.push(obj);
+  } else if(obj instanceof Asteroid) {
+    this.asteroids.push(obj);
+  }
 };
 
 
