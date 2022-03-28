@@ -3,7 +3,6 @@ const GameView = require("./game_view.js");
 
 const g = new Game();
 
-
 document.addEventListener("DOMContentLoaded", function() {
   const canvasEl = document.getElementById("game-canvas");
   var ctx = canvasEl.getContext("2d");
