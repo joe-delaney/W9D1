@@ -26,13 +26,13 @@ Game.prototype.draw = function(ctx) {
   ctx.clearRect(0,0,Game.DIM_X, Game.DIM_Y);
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, 1000, 650);
-  for (let i = 0; i < Game.NUM_ASTEROIDS; i++) {
+  for (let i = 0; i < this.asteroids.length; i++) {
     this.asteroids[i].draw(ctx);
   }
 };
 
 Game.prototype.moveObjects = function () {
-  for (let i = 0; i < Game.NUM_ASTEROIDS; i++) {
+  for (let i = 0; i < this.asteroids.length; i++) {
     this.asteroids[i].move();
   }
 };
@@ -55,11 +55,15 @@ Game.prototype.wrap = function(pos) {
 
 //Using brute force approach, might need to refactor if num of asteroids gets big
 Game.prototype.checkCollisions = function() {
-  for (let i = 0; i < Game.NUM_ASTEROIDS; i++) {
-    for (let j = 0; j < Game.NUM_ASTEROIDS; j++) {
-      if(i !== j) {
+  let n = this.asteroids.length;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      if(i !== j && i < n && j < n) {
         if(this.asteroids[i].isCollidedWith(this.asteroids[j])) {
           this.asteroids[i].collideWith(this.asteroids[j]);
+          n = this.asteroids.length;
+          i = 0;
+          j = 0;
         }
       }
     }
@@ -72,11 +76,8 @@ Game.prototype.step = function() {
 };
 
 Game.prototype.remove = function(asteroid) {
-  debugger;
-  let index = this.asteroids.indexOf(asteroid);
-  if(index !== -1) {
-    this.asteroids.splice(index, 1);
-  }
+  this.asteroids = this.asteroids.filter((el) => el !== asteroid);
 };
+
 
 module.exports = Game;
